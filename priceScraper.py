@@ -25,6 +25,8 @@ read_url = "https://www.tiendasjumbo.co/nevera-haceb-311lt-brut-se-mi-tir2-gris-
 read_url = "https://www.tiendasjumbo.co/harina-pan-blanca-x-1000-g/p"
 read_url = "https://www.exito.com/nevera-no-frost-300-l-grafito-mabe-rma300fjcg-3037854/p"
 read_url = "https://www.alkosto.com/nevera-no-frost-challenger-300-litros-cr317-titanium/p/7705191041766"
+read_url = "https://www.homecenter.com.co/homecenter-co/product/71096/placa-de-yeso-st-1-2pg-122x244m-127mm-knauf/71096/"
+read_url = "https://www.homecenter.com.co/homecenter-co/product/344300/bateria-auto-36ist600m/344300/"
 req = requests.get(read_url,headers)
 
 #HTML parsing to find the prices of the commodities reported (entry variables)
@@ -41,6 +43,13 @@ price = priceSoup.findAll('span', class_=['exito-vtex-components-4-x-currencyCon
 priceSoup = BeautifulSoup(req.content, 'html.parser')
 price = priceSoup.find('span', id="js-original_price")
 
+##homecenter
+priceSoup = BeautifulSoup(req.content, 'html.parser')
+price = priceSoup.findAll('span', class_='jsx-116178131')[1]
+
+
+div.jsx-757574275:nth-child(2)
+<span class="jsx-116178131">694.900</span>
 for rem in [13,15,17]:
     del(priceInd[rem])
 
