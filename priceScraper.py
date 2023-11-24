@@ -8,6 +8,7 @@ Created on Thu Nov  9 12:57:44 2023
 import requests
 import re
 from bs4 import BeautifulSoup
+import json
 
 def get_price(url, headers, website):
     req = requests.get(url,headers)
@@ -15,7 +16,8 @@ def get_price(url, headers, website):
     if website == 'jumbo':
         price = priceSoup.find('div', class_=['pr2'])
     elif website == 'exito':
-        price = priceSoup.findAll('span', class_=['exito-vtex-components-4-x-currencyContainer'])
+        jsonprice = json.loads(priceSoup.find('script', type='application/ld+json').getText())
+        price = jsonprice['offers']['lowPrice']
     elif website == 'alkosto':
         price = priceSoup.find('span', id="js-original_price")
     elif website == 'homecenter':
