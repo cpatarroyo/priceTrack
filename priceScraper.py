@@ -23,7 +23,8 @@ def get_price(url, headers, website):
     elif website == 'homecenter':
         price = priceSoup.findAll('span', class_='jsx-116178131')[1]
     elif website == 'mercadolibre':
-        price = priceSoup.find('span', class_='andes-money-amount__fraction')
+        jsonprice = json.loads(priceSoup.find('script', type='application/ld+json').getText())
+        price = jsonprice['offers']['lowPrice']
     elif website == 'falabella':
         price = priceSoup.find('li', class_='jsx-329924046 prices-1')
         if price is None:
