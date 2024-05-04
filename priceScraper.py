@@ -30,7 +30,13 @@ def get_price(url, website):
         if price is None:
             price = priceSoup.find('li', class_='jsx-329924046 prices-0')
     elif website == 'drogueria_colsubsidio':
-        price = priceSoup.findAll('script', var='skuJson_0')
+        scripts = priceSoup.findAll('script')
+        matchscript = [x for x in scripts if 'productPriceTo' in x.getText()]
+        tempdict = json.loads(matchscript[0].getText()[matchscript[0].getText().index('(')+1:matchscript[0].getText().index(')')])
+        price = float(tempdict['productPriceTo'])
+    elif website == 'olimpica':
+        price = priceSoup.find('meta', property='product:price:amount')
+        price = float(price['content'])
     
     if isinstance(price,(int,float)):
         return(float(price))
