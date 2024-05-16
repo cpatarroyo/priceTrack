@@ -67,7 +67,7 @@ for row in websites.fetchall():
     except ValueError:
         print('Hay un valor erroneo!')
     
-for prodId, precio in precios:
+for prodId, precio in precios.items():
     cursor.execute("INSERT INTO precios (prodID, precio, fecha) VALUES (?, ?, ?)", (prodId, precio, hoy))
     
 conexion.commit()
