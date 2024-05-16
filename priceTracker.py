@@ -10,7 +10,7 @@ Created on Wed Nov 22 09:06:57 2023
 import sqlite3
 from datetime import date
 #from bs4 import BeautifulSoup
-from priceScraper import get_price
+from priceScraper import get_price, get_dollar
 
 #Create headers for the url request so the site does not recognize the scrapping attempt
 
@@ -24,6 +24,7 @@ from priceScraper import get_price
 
 #Obtener las url de la tabla websites
 hoy = date.today()
+prdolar = get_dollar()
 conexion = sqlite3.connect("monitoreo.db")
 cursor = conexion.cursor()
 
@@ -44,7 +45,7 @@ precio DOUBLE,
 fecha DATE); """
 cursor.execute(precioCreateCommand)
 
-#Crear la tabla de productos si es que no existe
+#Crear la tabla de monedas si es que no existe
 monedaCreateCommand = """ CREATE TABLE IF NOT EXISTS monedas (
 monID INT AUTO_INCREMENT PRIMARY KEY,
 moneda VARCHAR(20),
@@ -52,12 +53,19 @@ precio DOUBLE NOT NULL,
 fecha DATE); """
 cursor.execute(monedaCreateCommand)
 
+#Ingresar el precio del dolar del día
+cursor.execute("INSERT INTO monedas (moneda, precio, fecha) VALUES (?, ?, ?)", ('Dolar',prdolar, hoy))
+
+#Sacar los productos y las url de cada producto
 websites = cursor.execute("SELECT prodID, url, tienda FROM productos")
 precios = {}
 
 #Obtener los precios de cada una de las paginas
 for row in websites.fetchall():
-    precios[row[0]] = (get_price(row[1], row[2]))
+    try:
+        precios[row[0]] = (get_price(row[1], row[2], prdolar))
+    except ValueError:
+        print('Hay un valor erroneo!')
     
 for prodId, precio in precios:
     cursor.execute("INSERT INTO precios (prodID, precio, fecha) VALUES (?, ?, ?)", (prodId, precio, hoy))

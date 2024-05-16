@@ -10,7 +10,7 @@ import re
 from bs4 import BeautifulSoup
 import json
 
-def get_price(url, website):
+def get_price(url, website, prdolar):
     req = requests.get(url)
     priceSoup = BeautifulSoup(req.content, 'html.parser')
     if website == 'jumbo':
@@ -37,6 +37,19 @@ def get_price(url, website):
     elif website == 'olimpica':
         price = priceSoup.find('meta', property='product:price:amount')
         price = float(price['content'])
+    elif website == 'drogueria_cafam':
+        price = priceSoup.find('span', itemprop='price')
+        price = float(price['content'])
+    elif website == 'drogas_la_rebaja':
+        price = priceSoup.findAll('script')
+    elif website == 'farmatodo':
+        price = priceSoup.find('p',class_='p-blue')
+    elif website == 'locatel':
+        price = priceSoup.find('span', class_='vtex-store-components-3-x-currencyContainer vtex-store-components-3-x-currencyContainer--contentPricePdp')
+    elif website == 'amazon':
+        temprice = priceSoup.find('span', class_ = 'a-price')
+        temprice = temprice.getText().split('$')[1]
+        price = prdolar * float(re.sub(r'[,]','.',re.sub(r'[^0-9.,]','',temprice)))
     
     if isinstance(price,(int,float)):
         return(float(price))
@@ -45,4 +58,9 @@ def get_price(url, website):
     else:
         return(float(re.sub(r'[,]','.',re.sub(r'[^0-9,]','',price.getText()))))
     
-
+def get_dollar():
+    DOLLARURL = 'https://www.larepublica.co/indicadores-economicos/mercado-cambiario/dolar'
+    req = requests.get(DOLLARURL)
+    dolSoup = BeautifulSoup(req.content, 'html.parser')
+    dollar = dolSoup.find('span',class_='price')
+    return(float(re.sub(r'[,]','.',re.sub(r'[^0-9,]','',dollar.getText()))))
