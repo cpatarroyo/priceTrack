@@ -30,7 +30,7 @@ cursor = conexion.cursor()
 
 #Crear la tabla de productos si es que no existe
 prodCreateCommand = """ CREATE TABLE IF NOT EXISTS productos (
-prodID INT AUTO_INCREMENT PRIMARY KEY,
+prodID INTEGER PRIMARY KEY AUTOINCREMENT,
 nombre VARCHAR(50) NOT NULL,
 tienda VARCHAR(20) NOT NULL,
 url VARCHAR NOT NULL,
@@ -39,7 +39,7 @@ cursor.execute(prodCreateCommand)
 
 #Crear la tabla de precios si es que no existe
 precioCreateCommand = """ CREATE TABLE IF NOT EXISTS precios (
-precioID INT AUTO_INCREMENT PRIMARY KEY,
+precioID INTEGER PRIMARY KEY AUTOINCREMENT,
 prodID INT NOT NULL,
 precio DOUBLE,
 fecha DATE); """
@@ -47,7 +47,7 @@ cursor.execute(precioCreateCommand)
 
 #Crear la tabla de monedas si es que no existe
 monedaCreateCommand = """ CREATE TABLE IF NOT EXISTS monedas (
-monID INT AUTO_INCREMENT PRIMARY KEY,
+monID INTEGER PRIMARY KEY AUTOINCREMENT,
 moneda VARCHAR(20),
 precio DOUBLE NOT NULL,
 fecha DATE); """
