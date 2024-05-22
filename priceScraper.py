@@ -48,8 +48,11 @@ def get_price(url, website, prdolar):
         price = priceSoup.find('span', class_='vtex-store-components-3-x-currencyContainer vtex-store-components-3-x-currencyContainer--contentPricePdp')
     elif website == 'amazon':
         temprice = priceSoup.find('span', class_ = 'a-price')
-        temprice = temprice.getText().split('$')[1]
-        price = prdolar * float(re.sub(r'[,]','.',re.sub(r'[^0-9.,]','',temprice)))
+        if temprice is None:
+            price = None
+        else:
+            temprice = temprice.getText().split('$')[1]
+            price = prdolar * float(re.sub(r'[,]','.',re.sub(r'[^0-9.,]','',temprice)))
     
     if isinstance(price,(int,float)):
         return(float(price))
