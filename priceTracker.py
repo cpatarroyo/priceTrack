@@ -63,6 +63,7 @@ precios = {}
 #Obtener los precios de cada una de las paginas
 for row in websites.fetchall():
     try:
+        print(row)
         precios[row[0]] = (get_price(row[1], row[2], prdolar))
     except ValueError:
         print('Hay un valor erroneo!')

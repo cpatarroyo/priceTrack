@@ -41,7 +41,11 @@ def get_price(url, website, prdolar):
         price = priceSoup.find('span', itemprop='price')
         price = float(price['content'])
     elif website == 'drogas_la_rebaja':
-        price = priceSoup.findAll('script')
+        temprice = priceSoup.findAll('script')
+        matchscript = [x for x in temprice if 'lowPrice' in x.getText()]
+        tempdict = json.loads(matchscript[0].getText())
+        matchdict = [y for y in tempdict.keys() if 'listPrice' in y]
+        price = tempdict[matchdict[0]]['lowPrice']
     elif website == 'farmatodo':
         price = priceSoup.find('p',class_='p-blue')
     elif website == 'locatel':
