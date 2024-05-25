@@ -44,8 +44,8 @@ def get_price(url, website, prdolar):
         temprice = priceSoup.findAll('script')
         matchscript = [x for x in temprice if 'lowPrice' in x.getText()]
         tempdict = json.loads(matchscript[0].getText())
-        matchdict = [y for y in tempdict.keys() if 'listPrice' in y]
-        price = tempdict[matchdict[0]]['lowPrice']
+        matchdict = [y for y in tempdict.keys() if 'commertialOffer' in y]
+        price = tempdict[matchdict[0]]['Price']
     elif website == 'farmatodo':
         price = priceSoup.find('p',class_='p-blue')
     elif website == 'locatel':
